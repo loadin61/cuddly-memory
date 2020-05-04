@@ -1,0 +1,33 @@
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+using namespace std;
+typedef long long ll;
+struct node {
+	int x, y, id;
+}a[1010];
+int n, ans, f;
+bool cmp(node p, node q) {
+	return p.y < q.y;
+}
+int main() {
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) {
+		scanf("%d %d", &a[i].x, &a[i].y);
+		a[i].id = i;
+	}
+	sort(a + 1, a + 1 + n, cmp);
+	ans = 1; f = 1;
+	printf("%d ", a[1].id);
+	for (int i = 2; i <= n; i++) {
+		if (a[i].x >= a[f].y) {
+			ans++;
+			printf("%d ", a[i].id);
+			f = i;
+		}
+	}
+	printf("\n%d", ans);
+}
