@@ -1,0 +1,60 @@
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<cstdlib>
+#include<cmath>
+using namespace std;
+typedef long long ll;
+const int inf = 0x3f3f3f3f;
+double minlen, x[1010], r[1010];
+int n;
+double best[1010];
+void compute() {
+    double low = 0, high = 0;
+    for (int i = 1; i <= n; i++) {
+        if (x[i] - r[i] < low)      low = x[i] - r[i];
+        if (x[i] + r[i] > high)     high = x[i] + r[i];
+    }
+    if (high - low < minlen) {
+        minlen = high - low;
+        for (int i = 1; i <= n; i++) {
+            best[i] = r[i];
+        }
+    }
+}
+
+double center(int t) {
+    double tem = 0;
+    for (int i = 1; i < t; i++) {
+        tem = max(x[i] + 2.0 * sqrt(r[i] * r[t]),tem);
+    }
+    return tem;
+}
+
+void back(int t) {
+    if (t > n)  compute();
+    else {
+        for (int i = t; i <= n; i++) {
+            swap(r[t], r[i]);
+            double cx = center(t);
+            if (cx + r[1] + r[t] < minlen) {
+                x[t] = cx;
+                back(t + 1);
+            }
+            swap(r[t], r[i]);
+        }
+    }
+}
+
+int main() {
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i++)    scanf("%lf", &r[i]);
+    minlen = inf;
+    back(1);
+    printf("最小排列长度：%f\n", minlen);
+    for (int i = 1; i <= n; i++) {
+        printf("%f", best[i]);
+        if (i != n)    printf("\n");
+    }
+}
